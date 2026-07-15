@@ -31,6 +31,9 @@ spendwise/
 │   └── script.js           # Frontend logic & API interaction
 ├── requirements.txt        # Project dependencies
 └── README.md               # Documentation
+
+
+
 💻 Installation & Local Setup
 Prerequisites
 Python 3 installed
