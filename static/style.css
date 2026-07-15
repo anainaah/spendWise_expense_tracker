@@ -31,6 +31,7 @@ body {
     padding: 40px 20px;
     display: flex;
     justify-content: center;
+    align-items: flex-start;
 }
 
 .app-container {
@@ -41,9 +42,20 @@ body {
     gap: 24px;
 }
 
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
 /* Header Section */
 header {
     margin-bottom: 8px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
@@ -70,6 +82,39 @@ header h1 {
     font-size: 14px;
     color: var(--text-muted);
     margin-top: 4px;
+}
+
+/* User Profile Header */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--bg-secondary);
+    padding: 8px 16px;
+    border-radius: 9999px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+#user-display {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.btn-logout-header {
+    background: none;
+    border: none;
+    color: var(--danger);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-logout-header:hover {
+    opacity: 0.8;
+    text-decoration: underline;
 }
 
 /* Card Design (Modern White Shadows) */
@@ -158,7 +203,7 @@ header h1 {
     box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-/* Primary Button Styling (Mint/Teal Gradient) */
+/* Button Styling */
 .btn-primary {
     background: linear-gradient(135deg, #0d9488, #14b8a6);
     color: white;
@@ -179,6 +224,71 @@ header h1 {
 
 .btn-primary:active {
     transform: scale(0.98);
+}
+
+.btn-secondary {
+    background-color: #f1f5f9;
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+}
+
+/* Auth Page Layout */
+.auth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+}
+
+.auth-subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    margin-top: -12px;
+}
+
+.auth-toggle {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 4px;
+    font-size: 13px;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
 }
 
 /* Chart Canvas Area */
@@ -219,7 +329,6 @@ tr:last-child td {
     border-bottom: none;
 }
 
-/* Category Pill Badges inside Table */
 .category-pill {
     display: inline-block;
     padding: 4px 8px;
@@ -231,7 +340,26 @@ tr:last-child td {
     color: var(--accent);
 }
 
-/* Delete Button */
+.table-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-edit {
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.btn-edit:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
 .btn-delete {
     background: none;
     border: none;

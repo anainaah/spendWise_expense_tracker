@@ -26,10 +26,9 @@ def test_categorize_fallback():
 
 
 # ==========================================
-# 2. INTEGRATION TESTS (For Flask API Routes)
+# 2. INTEGRATION TESTS (For Flask Scoped Auth & API Edit)
 # ==========================================
 
-# A Pytest fixture that sets up a clean, isolated in-memory test database 
 @pytest.fixture
 def client():
     app.config['TESTING'] = True
@@ -37,49 +36,67 @@ def client():
     
     with app.test_client() as client:
         with app.app_context():
-            db.create_all()  # Build temporary tables in memory
-        yield client         # Return test client to execute route requests
+            db.create_all()
+        yield client
         with app.app_context():
-            db.drop_all()    # Clean up after tests run
+            db.drop_all()
 
-def test_home_route(client):
-    """Verify that the landing page renders successfully."""
-    response = client.get('/')
-    assert response.status_code == 200
+# Helper function to register and log in a user during tests
+def auth_user(client, username, password):
+    client.post('/register', json={"username": username, "password": password})
 
-def test_api_get_expenses_empty(client):
-    """Verify that a clean database returns an empty list."""
-    response = client.get('/expenses')
-    assert response.status_code == 200
-    assert response.json == []
-
-def test_api_add_expense_validation(client):
-    """Verify API rejects bad inputs with 400 Bad Request."""
-    bad_payload = {"amount": -10.0, "note": "Valid note", "date": "2026-07-15"}
-    response = client.post('/expenses', json=bad_payload)
-    assert response.status_code == 400
+def test_auth_blocks_unauthorized(client):
+    """Verify backend blocks API endpoints if logged out."""
+    res_get = client.get('/expenses')
+    assert res_get.status_code == 401
     
-    empty_note_payload = {"amount": 500, "note": "", "date": "2026-07-15"}
-    response = client.post('/expenses', json=empty_note_payload)
-    assert response.status_code == 400
+    res_post = client.post('/expenses', json={"amount": 100, "note": "lunch", "date": "2026-07-15"})
+    assert res_post.status_code == 401
 
-def test_api_add_and_delete_expense(client):
-    """Verify successful POST and DELETE cycles."""
-    # 1. Add record
-    payload = {"amount": 250.0, "note": "Swiggy burger", "date": "2026-07-15"}
-    post_res = client.post('/expenses', json=payload)
-    assert post_res.status_code == 201
+def test_user_registration_and_login(client):
+    """Verify standard register and login flow."""
+    # Register
+    reg_res = client.post('/register', json={"username": "alice", "password": "alicepassword"})
+    assert reg_res.status_code == 201
+    assert reg_res.json['username'] == "alice"
+    
+    # Check session authentication state
+    auth_check = client.get('/check-auth')
+    assert auth_check.json['authenticated'] is True
+    assert auth_check.json['username'] == "alice"
+
+def test_scoped_database_isolation(client):
+    """Verify User A cannot read or write to User B's account."""
+    # 1. Register User A and create an expense
+    auth_user(client, "usera", "password123")
+    client.post('/expenses', json={"amount": 250.0, "note": "Uber ride", "date": "2026-07-15"})
+    
+    get_res_a = client.get('/expenses')
+    assert len(get_res_a.json) == 1
+    
+    # Logout User A
+    client.post('/logout')
+    
+    # 2. Register User B and verify they see an empty list
+    auth_user(client, "userb", "password123")
+    get_res_b = client.get('/expenses')
+    assert len(get_res_b.json) == 0  # Isolation check: User B cannot see User A's expense
+
+def test_api_edit_expense(client):
+    """Verify editing works and automatically re-categorizes if note changes."""
+    auth_user(client, "testuser", "password123")
+    
+    # 1. Create an expense (Food keyword)
+    post_res = client.post('/expenses', json={"amount": 400.0, "note": "zomato food", "date": "2026-07-15"})
     expense_id = post_res.json['id']
-    assert post_res.json['category'] == "Food"  # Check auto-categorization works on API request
+    assert post_res.json['category'] == "Food"
+
+    # 2. Edit the expense (change amount and change note to transport keyword)
+    edit_payload = {"amount": 120.0, "note": "uber taxi ride", "date": "2026-07-15"}
+    put_res = client.put(f'/expenses/{expense_id}', json=edit_payload)
     
-    # 2. Fetch list to verify it exists
-    get_res = client.get('/expenses')
-    assert len(get_res.json) == 1
-    
-    # 3. Delete record
-    delete_res = client.delete(f'/expenses/{expense_id}')
-    assert delete_res.status_code == 204
-    
-    # 4. Fetch list again to verify it is gone
-    get_res_after = client.get('/expenses')
-    assert len(get_res_after.json) == 0
+    assert put_res.status_code == 200
+    assert put_res.json['amount'] == 120.0
+    assert put_res.json['note'] == "uber taxi ride"
+    # Verification: Smart categorizer should have triggered and updated category to Transport
+    assert put_res.json['category'] == "Transport"

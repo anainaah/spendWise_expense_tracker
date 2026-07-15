@@ -6,18 +6,51 @@
     <title>SpendWise — AI-Assisted Expense Tracker</title>
     <!-- Premium font for typography -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Main Stylesheet served by Flask -->
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Chart.js for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="app-container">
+    <!-- 1. Authentication Overlay (Login / Signup Screen) -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="card auth-card">
+            <h2 id="auth-title">Welcome to SpendWise</h2>
+            <p class="auth-subtitle">Log in or create an account to start tracking</p>
+            
+            <form id="auth-form">
+                <div class="form-group">
+                    <label for="auth-username">Username</label>
+                    <input type="text" id="auth-username" placeholder="Enter username" required minlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="auth-password">Password</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" required minlength="6">
+                </div>
+                <button type="submit" id="auth-btn" class="btn-primary">Log In</button>
+            </form>
+
+            <div class="auth-toggle">
+                <span id="toggle-text">Don't have an account?</span>
+                <button id="toggle-auth-mode" class="btn-link">Sign Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Main App Content (Hidden by default until logged in) -->
+    <div id="app-container" class="app-container hidden">
         <!-- Header Section -->
         <header>
-            <div class="logo">
-                <span class="logo-icon">⚡</span>
-                <h1>SpendWise</h1>
+            <div class="header-top">
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <h1>SpendWise</h1>
+                </div>
+                <!-- User Profile Header Section -->
+                <div class="user-profile">
+                    <span id="user-display">Logged in as ...</span>
+                    <button id="logout-btn" class="btn-logout-header">Logout</button>
+                </div>
             </div>
             <p class="subtitle">Smart insights & automated expense categorization</p>
         </header>
@@ -34,9 +67,9 @@
 
         <!-- Form and Chart Grid -->
         <main class="dashboard-grid">
-            <!-- Add Expense Section -->
+            <!-- Add / Edit Expense Section -->
             <section class="card form-card">
-                <h2>Add Transaction</h2>
+                <h2 id="form-title">Add Transaction</h2>
                 <form id="expense-form">
                     <div class="form-group">
                         <label for="amount">Amount (₹)</label>
@@ -50,7 +83,10 @@
                         <label for="date">Transaction Date</label>
                         <input type="date" id="date" required>
                     </div>
-                    <button type="submit" class="btn-primary">Log Expense</button>
+                    
+                    <button type="submit" id="submit-btn" class="btn-primary">Log Expense</button>
+                    <!-- Cancel Button for edit mode (hidden by default) -->
+                    <button type="button" id="cancel-edit-btn" class="btn-secondary hidden">Cancel Edit</button>
                 </form>
             </section>
 
@@ -74,7 +110,7 @@
                             <th>Description</th>
                             <th>Category</th>
                             <th>Amount</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="expense-body">
