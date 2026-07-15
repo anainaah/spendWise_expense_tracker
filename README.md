@@ -1,29 +1,46 @@
 # SpendWise — AI-Assisted Expense Tracker
-
-SpendWise is a full-stack expense tracker built with Flask, SQLite, and Vanilla JavaScript. It features automated expense categorization, RESTful APIs, interactive Chart.js visualizations, and monthly spending insights, showcasing full-stack development, database integration, and clean UI design.
-
-## 🚀 Features
-
-- **Automated Expense Categorization**: A custom rule-based engine (`smart_categorizer.py`) that checks transaction notes and automatically assigns categories (Food, Transport, Bills, Shopping, Other) upon entry.
-- **Plain-English Spending Insights**: An analysis module (`insights.py`) that calculates month-over-month category aggregates and generates natural-language spending feedback (e.g., *"You spent 15% more on Food this month than last month"*).
-- **Interactive Data Visualization**: A dynamic dashboard utilizing **Chart.js** to display category distributions that updates in real-time without reloading the page.
-- **Defensive API Architecture**: Clean input validation, sanitization, and error handling, returning appropriate HTTP status codes (e.g., `400 Bad Request`, `201 Created`, `204 No Content`).
-- **Automated Testing Suite**: Standardized testing containing unit tests for categorization rules and API integration tests using an isolated, in-memory SQLite database.
-
+SpendWise is a full-stack expense tracker built with Flask, SQLite, and Vanilla JavaScript. It features automated expense categorization, secure user session authentication, RESTful APIs, interactive Chart.js visualizations, and monthly spending insights, showcasing full-stack development, database integration, and clean UI design.
 ---
+## 📐 System Architecture
+Below is the high-level system architecture of SpendWise:
+```mermaid
+graph TD
+    subgraph Frontend (Client Browser)
+        A[HTML5 UI & Custom CSS] --> B[Vanilla JavaScript]
+        B --> C[Chart.js Visual Engine]
+    end
+    
+    subgraph Backend (Flask API Server)
+        D[Flask Controllers & Routes]
+        E[User Auth Middleware / Cookie Session]
+        F[Auto-Categorizer & Insight Engines]
+    end
+    
+    subgraph Database Layer
+        G[(SQL Database: SQLite / PostgreSQL)]
+    end
+    
+    B <-->|HTTP JSON Requests & Responses| D
+    D <--> E
+    D <--> F
+    D <-->|SQLAlchemy ORM| G
+🚀 Features
+Multi-User Authentication: Register/Login system using secure password hashing (PBKDF2 via werkzeug.security) and cookie session persistence.
+Automated Expense Categorization: A custom rule-based engine (smart_categorizer.py) that checks transaction notes and automatically assigns categories (Food, Transport, Bills, Shopping, Other) upon entry.
+Transaction Editing: Edit amounts, notes, and dates dynamically. The categorizer automatically re-analyzes and updates the category if the note changes.
+Plain-English Spending Insights: An analysis module (insights.py) that calculates month-over-month category aggregates and generates natural-language spending feedback.
+Interactive Data Visualization: A dynamic dashboard utilizing Chart.js with custom mint/teal themes to display category distributions.
+Defensive API Architecture: Clean input validation, sanitization, and error handling, returning appropriate HTTP status codes (e.g., 400 Bad Request, 201 Created, 204 No Content).
+Automated Testing Suite: Standardized testing containing unit tests for categorization rules and API integration tests using an isolated, in-memory SQLite database.
+🛠️ Tech Stack
+Backend: Python 3, Flask (REST API)
+Database: SQLite (local development), SQLAlchemy ORM (environment-variable configuration ready for production PostgreSQL/MySQL)
+Frontend: Vanilla HTML5, Custom CSS3 (Responsive Mint/Teal theme), Vanilla ES6 JavaScript (fetch API integration)
+Testing: Pytest
+📁 Project Structure
+text
 
-## 🛠️ Tech Stack
 
-- **Backend**: Python 3, Flask (REST API)
-- **Database**: SQLite (local development), SQLAlchemy ORM (Twelve-Factor environment-variable configuration ready for production PostgreSQL/MySQL)
-- **Frontend**: Vanilla HTML5, Custom CSS3 (Responsive Mint/Teal theme), Vanilla ES6 JavaScript (`fetch` API integration)
-- **Testing**: Pytest
-
----
-
-## 📁 Project Structure
-
-```text
 spendwise/
 ├── app.py                  # Main Flask server, configurations, and API routes
 ├── models.py               # SQLAlchemy Database schemas and models
@@ -37,18 +54,20 @@ spendwise/
 │   └── script.js           # Frontend logic & API interaction
 ├── requirements.txt        # Project dependencies
 └── README.md               # Documentation
-
-
-Installation & Setup
+💻 Installation & Local Setup
 Prerequisites
 Python 3 installed
 Git installed
 1. Clone the Repository
 bash
+
+
 git clone https://github.com/anainaah/spendWise_expense_tracker.git
 cd spendWise_expense_tracker
 2. Set Up a Virtual Environment
 bash
+
+
 # Create environment
 python -m venv venv
 # Activate on Windows (PowerShell)
@@ -57,23 +76,42 @@ python -m venv venv
 source venv/bin/activate
 3. Install Dependencies
 bash
+
+
 pip install -r requirements.txt
 4. Run the Server
 bash
+
+
 python app.py
 Open your browser and navigate to http://127.0.0.1:5000.
 
 🧪 Running Automated Tests
-To execute the test suite (unit and integration tests), run:
+To execute the test suite (8 unit and integration tests), run:
+
 bash
 
 
 pytest
-🔮 Future Roadmap
-Machine Learning Upgrade: Replace the rule-based keyword categorizer with a trained Naive Bayes text classifier using scikit-learn once the transaction dataset reaches a sufficient size.
-Database Migrations: Integrate Flask-Migrate (Alembic) to handle safe database schema updates in production.
-Multi-user Authentication: Implement JWT (JSON Web Tokens) or session-based cookies to allow multiple users to securely track expenses in isolated accounts.
+☁️ Deployment Guide (Render.com)
+This application is ready to deploy on Render.com (Web Service):
 
+Push your latest code to GitHub.
+Log in to Render and click New > Web Service.
+Connect your GitHub repository.
+Configure Environment:
+Build Command: pip install -r requirements.txt
+Start Command: gunicorn app:app (This uses the production-grade Gunicorn WSGI server installed in your requirements).
+Environment Variables (Advanced):
+To keep database items persistent, click New > PostgreSQL on Render to spin up a free database.
+Copy the Internal Database URL and add it to your Web Service env variables as DATABASE_URL. SQLAlchemy will automatically switch to PostgreSQL!
+Add a variable SECRET_KEY with a random string to secure session cookies.
+📸 Screenshots
+Welcome & Authentication
+SpendWise Login
+
+Live Analytics Dashboard
+SpendWise Dashboard
 
 
 
