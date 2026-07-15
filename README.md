@@ -5,18 +5,18 @@ SpendWise is a full-stack expense tracker built with Flask, SQLite, and Vanilla 
 Below is the high-level system architecture of SpendWise:
 ```mermaid
 graph TD
-    subgraph Frontend (Client Browser)
+    subgraph Frontend
         A[HTML5 UI & Custom CSS] --> B[Vanilla JavaScript]
         B --> C[Chart.js Visual Engine]
     end
     
-    subgraph Backend (Flask API Server)
+    subgraph Backend
         D[Flask Controllers & Routes]
         E[User Auth Middleware / Cookie Session]
         F[Auto-Categorizer & Insight Engines]
     end
     
-    subgraph Database Layer
+    subgraph Database
         G[(SQL Database: SQLite / PostgreSQL)]
     end
     
@@ -112,6 +112,12 @@ SpendWise Login
 
 Live Analytics Dashboard
 SpendWise Dashboard
+
+
+
+
+
+
 
 
 
