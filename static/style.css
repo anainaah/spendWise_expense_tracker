@@ -1,0 +1,248 @@
+/* Color Palette & Variables (White, Mint & Teal) */
+:root {
+    --bg-primary: #f4f8f6;       /* Soft mint-tinted light gray background */
+    --bg-secondary: #ffffff;     /* Pure white for cards */
+    --accent: #0d9488;           /* Rich Teal brand color */
+    --accent-hover: #0f766e;     /* Darker Teal for hover state */
+    --accent-glow: rgba(13, 148, 136, 0.08);
+    --mint-light: #f0fdfa;       /* Light mint green background */
+    --mint-border: #ccfbf1;      /* Very soft mint border */
+    --text-main: #0f172a;        /* Deep slate for clean readability */
+    --text-muted: #64748b;       /* Muted gray text */
+    --border-color: #e2e8f0;     /* Light gray border */
+    --danger: #e11d48;           /* Rose/Red for deletes */
+    --danger-hover: #be123c;
+    --success: #059669;          /* Emerald/Green */
+    --font-family: 'Inter', sans-serif;
+}
+
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Header Section */
+header {
+    margin-bottom: 8px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-icon {
+    font-size: 28px;
+    background: linear-gradient(135deg, #2dd4bf, #0d9488);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #111827;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* Card Design (Modern White Shadows) */
+.card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+}
+
+.card h2 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+/* AI Insight Card (Soft Mint/Teal Glow) */
+.insight-card {
+    border: 1px solid var(--mint-border);
+    background: linear-gradient(135deg, #ffffff, var(--mint-light));
+    box-shadow: 0 10px 15px -3px var(--accent-glow);
+}
+
+.badge {
+    background-color: rgba(13, 148, 136, 0.1);
+    border: 1px solid rgba(13, 148, 136, 0.2);
+    color: var(--accent-hover);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 9999px;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.insight-text {
+    font-size: 15px;
+    line-height: 1.6;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Form Styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.form-group input {
+    background-color: #ffffff;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Primary Button Styling (Mint/Teal Gradient) */
+.btn-primary {
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.2);
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.95;
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Chart Canvas Area */
+.chart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 250px;
+}
+
+/* Table Design */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #fafbfb;
+}
+
+td {
+    font-size: 14px;
+    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Category Pill Badges inside Table */
+.category-pill {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: var(--mint-light);
+    border: 1px solid var(--mint-border);
+    color: var(--accent);
+}
+
+/* Delete Button */
+.btn-delete {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.btn-delete:hover {
+    color: var(--danger-hover);
+    text-decoration: underline;
+}

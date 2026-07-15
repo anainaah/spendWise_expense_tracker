@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpendWise — AI-Assisted Expense Tracker</title>
+    <!-- Premium font for typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet served by Flask -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header>
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <h1>SpendWise</h1>
+            </div>
+            <p class="subtitle">Smart insights & automated expense categorization</p>
+        </header>
+
+        <!-- AI Insight Banner -->
+        <section class="insight-section">
+            <div class="card insight-card">
+                <div class="card-header">
+                    <span class="badge">AI SMART INSIGHT</span>
+                </div>
+                <p id="insight" class="insight-text">Analyzing your spending patterns...</p>
+            </div>
+        </section>
+
+        <!-- Form and Chart Grid -->
+        <main class="dashboard-grid">
+            <!-- Add Expense Section -->
+            <section class="card form-card">
+                <h2>Add Transaction</h2>
+                <form id="expense-form">
+                    <div class="form-group">
+                        <label for="amount">Amount (₹)</label>
+                        <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note">What did you spend on?</label>
+                        <input type="text" id="note" placeholder="e.g. Swiggy dinner, Uber cab, Netflix" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Transaction Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Log Expense</button>
+                </form>
+            </section>
+
+            <!-- Chart Section -->
+            <section class="card chart-card">
+                <h2>Category Distribution</h2>
+                <div class="chart-wrapper">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </section>
+        </main>
+
+        <!-- Transactions Table -->
+        <section class="card table-card">
+            <h2>Transaction History</h2>
+            <div class="table-wrapper">
+                <table id="expense-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expense-body">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Client-Side JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
